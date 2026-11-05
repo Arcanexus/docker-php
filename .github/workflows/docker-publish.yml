@@ -47,11 +47,18 @@ jobs:
         with:
           cosign-release: 'v2.1.1'
 
+      # Emulate the non-native architectures for multi-platform builds
+      # https://github.com/docker/setup-qemu-action
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
       # Set up BuildKit Docker container builder to be able to build
       # multi-platform images and export cache
       # https://github.com/docker/setup-buildx-action
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+        with:
+          platforms: linux/amd64,linux/arm/v7,linux/arm64
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
@@ -78,6 +85,7 @@ jobs:
         uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           context: .
+          platforms: linux/amd64,linux/arm/v7,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
