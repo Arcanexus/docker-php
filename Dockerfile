@@ -1,4 +1,4 @@
-FROM php:8.5.11-apache-trixie
+FROM php:8.6.0RC5-apache-trixie
 
 RUN DEBIAN_FRONTEND=noninteractive && apt update \
     && apt -y upgrade \
