@@ -5,9 +5,14 @@ updates:
     schedule:
       interval: weekly
     ignore:
-      # Stay on the PHP 8.5 line: only patch bumps (8.5.x), no 8.6 / RCs
+      # Skip PHP release candidates (e.g. 8.6.0RC5-apache-trixie).
+      # Dependabot reads "8.6.0RC5" as a pre-release of 8.6.0, so ">= X.a, < X"
+      # matches every alpha/beta/RC of X but not the stable X release.
       - dependency-name: php
-        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+        versions:
+          - ">= 8.6.0.a, < 8.6.0"
+          - ">= 8.7.0.a, < 8.7.0"
+          - ">= 9.0.0.a, < 9.0.0"
   - package-ecosystem: github-actions
     directory: /.github/workflows
     schedule:
